@@ -1,0 +1,63 @@
+ContextMap DDDSampleContextMap {
+  type SYSTEM_LANDSCAPE
+  state AS_IS
+
+  contains CargoBookingContext, VoyagePlanningContext, LocationContext
+
+  CargoBookingContext [SK]<->[SK] VoyagePlanningContext
+}
+
+BoundedContext CargoBookingContext {
+  Module cargo {
+    basePackage = se.citerus.dddsample.domain.model
+
+    Aggregate CargoItineraryLegDeliveryRouteSpecification {
+      Entity Cargo
+      ValueObject Delivery
+      ValueObject HandlingActivity
+      ValueObject Itinerary
+      ValueObject Leg
+      ValueObject RouteSpecification
+      enum TransportStatus {
+        NOT_RECEIVED, IN_PORT, ONBOARD_CARRIER, CLAIMED, UNKNOWN
+      }
+      enum RoutingStatus {
+        NOT_ROUTED, ROUTED, MISROUTED
+      }
+    }
+  }
+
+  Module handling {
+    basePackage = se.citerus.dddsample.domain.model
+
+    Aggregate Handling {
+      DomainEvent HandlingEvent
+      ValueObject HandlingHistory
+    }
+  }
+}
+
+BoundedContext VoyagePlanningContext {
+  Module voyage {
+    basePackage = se.citerus.dddsample.domain.model
+
+    Aggregate Voyage {
+      Entity Voyage
+      ValueObject CarrierMovement
+      ValueObject Schedule
+      ValueObject VoyageNumber
+    }
+  }
+}
+
+BoundedContext LocationContext {
+  Module location {
+    basePackage = se.citerus.dddsample.domain.model
+
+    Aggregate Location {
+      Entity Location
+      ValueObject UnLocode
+      ValueObject LocationShared
+    }
+  }
+}
